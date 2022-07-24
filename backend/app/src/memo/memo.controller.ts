@@ -1,19 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { MemoService } from './memo.service';
-import { CreateMemoDto } from './dto/create-memo.dto';
-import { UpdateMemoDto } from './dto/update-memo.dto';
-import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common'
+import { MemoService } from './memo.service'
+import { CreateMemoDto } from './dto/create-memo.dto'
+import { UpdateMemoDto } from './dto/update-memo.dto'
+import {
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
 
 @Controller('memo')
 export class MemoController {
   constructor(private readonly memoService: MemoService) {}
 
   @Post()
-  @ApiOperation({ summary: '새로운 메모를 추가한다'})
+  @ApiOperation({ summary: '새로운 메모를 추가한다' })
   @ApiCreatedResponse({ description: '성공적으로 추가됨' })
   @ApiUnauthorizedResponse({ description: '유저 인증 필요' })
   create(@Body() createMemoDto: CreateMemoDto) {
-    return this.memoService.create(createMemoDto);
+    return this.memoService.create(createMemoDto)
   }
 
   @Get()
@@ -21,7 +35,7 @@ export class MemoController {
   @ApiOkResponse({ description: '성공적으로 가져옴' })
   @ApiUnauthorizedResponse({ description: '유저 인증 필요' })
   findAll() {
-    return this.memoService.findAll();
+    return this.memoService.findAll()
   }
 
   @Patch(':id')
@@ -30,7 +44,7 @@ export class MemoController {
   @ApiNotFoundResponse({ description: 'id에 해당하는 메모를 찾을 수 없음' })
   @ApiUnauthorizedResponse({ description: '유저 인증 필요' })
   update(@Param('id') id: string, @Body() updateMemoDto: UpdateMemoDto) {
-    return this.memoService.update(+id, updateMemoDto);
+    return this.memoService.update(+id, updateMemoDto)
   }
 
   @Delete(':id')
@@ -39,6 +53,6 @@ export class MemoController {
   @ApiNotFoundResponse({ description: 'id에 해당하는 메모를 찾을 수 없음' })
   @ApiUnauthorizedResponse({ description: '유저 인증 필요' })
   remove(@Param('id') id: string) {
-    return this.memoService.remove(+id);
+    return this.memoService.remove(+id)
   }
 }
