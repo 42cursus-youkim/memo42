@@ -8,6 +8,8 @@ services:
       - 3000
     networks:
       - internal
+    env_file:
+      - postgres.env
 
   frontend:
     build: frontend
@@ -17,5 +19,20 @@ services:
     networks:
       - internal
 
+  database:
+    image: postgres:14.1-alpine
+    restart: always
+    env_file:
+      - postgres.env
+    volumes:
+      - postgres:/var/lib/postgresql
+    expose:
+      - 5432
+    networks:
+      - internal
+
 networks:
   internal:
+
+volumes:
+  postgres:
