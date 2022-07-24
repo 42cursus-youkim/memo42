@@ -12,7 +12,7 @@ import { Memo } from './memo/entities/memo.entity'
     AuthModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'database',
+      host: 'database', // docker-compose의 서비스명
       port: 5432,
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
