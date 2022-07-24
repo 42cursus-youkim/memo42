@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
 import { CreateMemoDto } from './dto/create-memo.dto'
 import { UpdateMemoDto } from './dto/update-memo.dto'
+import { Memo } from './entities/memo.entity'
 
 @Injectable()
 export class MemoService {
-  create(createMemoDto: CreateMemoDto) {
-    return 'This action adds a new memo'
+  constructor(
+    @InjectRepository(Memo)
+    private memoRepository: Repository<Memo>,
+  ) {}
+
+  async create(createMemoDto: CreateMemoDto): Promise<void> {
+    const memo = this.memoRepository.create(createMemoDto)
+    await this.memoRepository.save(memo)
   }
 
-  findAll() {
-    return `This action returns all memo`
+  findAll(): Promise<Memo[]> {
+    return this.memoRepository.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} memo`
+  findOne(id: number): Promise<Memo> {
+    return this.memoRepository.findOneBy({ id })
   }
 
-  update(id: number, updateMemoDto: UpdateMemoDto) {
-    return `This action updates a #${id} memo`
+  async update(id: number, updateMemoDto: UpdateMemoDto): Promise<void> {
+    await this.memoRepository.update(id, updateMemoDto)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} memo`
+  async remove(id: number): Promise<void> {
+    await this.memoRepository.delete(id)
   }
 }

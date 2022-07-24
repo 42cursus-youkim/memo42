@@ -27,3 +27,9 @@
 ```sh
 > docker compose up --build -d
 ```
+
+## 힘들게 배우다
+
+- 백엔드 API 직접 테스트시에는...
+  - `frontend`가 라우팅을 하므로 전부 주석처리
+  - `backend`의 `expose`를 `port`로 변경
