@@ -4,25 +4,50 @@ import Main from './Main'
 import Sidebar, { NotePreview } from './Sidebar'
 import { useState } from 'react'
 import { Note } from './Note'
+import axios from 'axios'
+
+const url = 'http://localhost:3000/api'
 
 const App = () => {
   const useNotes = () => {
-    const [notes, setNotes] = useState<Note[]>(
-      JSON.parse(localStorage.getItem('notes') || '[]'),
-    )
-    const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
+    const [notes, setNotes] = useState<Note[]>([])
+    const [loaded, setLoaded] = useState(false)
+    const [activeNoteId, setActiveNoteId] = useState<number | null>(null)
 
     useEffect(() => {
-      localStorage.setItem('notes', JSON.stringify(notes))
+      const fetchData = async () => {
+        setLoaded(true)
+        axios
+          .get(`${url}/memo`)
+          .then(res => {
+            const data = res.data as Note[]
+            console.log(data)
+            setNotes(data.map(j => Note.fromJSON(j)))
+          })
+          .catch(err => console.error(err))
+      }
+
+      console.log('fetching data')
+      fetchData()
+    }, [])
+
+    useEffect(() => {
+      if (!loaded) {
+        return
+      }
+
+      axios
+        .post(`${url}/memo`, JSON.stringify(notes))
+        .catch(err => console.error(err))
     }, [notes])
 
     const onAddNote = () => {
-      const newNote = new Note()
+      const newNote = new Note(notes.length)
       setNotes([...notes, newNote])
       setActiveNoteId(newNote.id)
     }
 
-    const onDeleteNote = (id: string) => {
+    const onDeleteNote = (id: number) => {
       setNotes(notes.filter(note => note.id !== id))
     }
 
@@ -41,10 +66,11 @@ const App = () => {
       setNotes(newNotes)
     }
 
-    const sortedNotes = notes.sort((a, b) => b.lastModified - a.lastModified)
+    // const sortedNotes = notes.sort((a, b) => b.lastModified - a.lastModified)
 
     return {
-      sortedNotes,
+      notes,
+      // sortedNotes,
       onAddNote,
       onDeleteNote,
       onUpdateNote,
@@ -55,7 +81,8 @@ const App = () => {
   }
 
   const {
-    sortedNotes,
+    notes,
+    // sortedNotes,
     onAddNote,
     activeNoteId,
     setActiveNoteId,
@@ -68,7 +95,7 @@ const App = () => {
     <div className="App">
       <Sidebar
         onAddNote={onAddNote}
-        notes={sortedNotes.map(note => (
+        notes={notes.map(note => (
           <NotePreview
             note={note}
             key={note.id}

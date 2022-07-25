@@ -15,8 +15,8 @@ export const NotePreview = ({
   activeNote,
 }: {
   note: Note
-  onDeleteNote: (id: string) => void
-  activeNote: string | null
+  onDeleteNote: (id: number) => void
+  activeNote: number | null
   setActiveNote: any
 }) => {
   return (
@@ -28,10 +28,10 @@ export const NotePreview = ({
         <button onClick={() => onDeleteNote(note.id)}>Delete</button>
       </div>
 
-      <p>{shorten(note.body)}</p>
-      <small className="note-meta">
+      <p>{shorten(note.content)}</p>
+      {/* <small className="note-meta">
         Last Modified {new Date(note.lastModified).toISOString()}
-      </small>
+      </small> */}
     </div>
   )
 }
