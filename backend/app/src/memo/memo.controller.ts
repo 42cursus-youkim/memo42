@@ -18,7 +18,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 
-@Controller('memo')
+@Controller('api/memo')
 export class MemoController {
   constructor(private readonly memoService: MemoService) {}
 

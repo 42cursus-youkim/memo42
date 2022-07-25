@@ -4,24 +4,24 @@ services:
   backend:
     build: backend
     restart: always
-    volumes:
-      - ./backend/app:/app
-    # expose:
-    # - 3000
-    ports:
-      - 3000:3000
+    # volumes:
+    #   - ./backend/app/src:/app/src
+    expose:
+      - 3000
     networks:
       - internal
     env_file:
       - postgres.env
 
-  # frontend:
-  #   build: frontend
-  #   restart: always
-  #   ports:
-  #     - 3000:3000
-  #   networks:
-  #     - internal
+  frontend:
+    build: frontend
+    restart: always
+    # volumes:
+    #   - ./frontend/app/src:/app/src
+    ports:
+      - 3000:3000
+    networks:
+      - internal
 
   database:
     image: postgres:14.1-alpine
